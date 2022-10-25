@@ -1,4 +1,4 @@
-import { api, LightningElement } from 'lwc';
+import { api, LightningElement, track } from 'lwc';
 import {
   FlowAttributeChangeEvent,
   FlowNavigationNextEvent,
@@ -12,6 +12,7 @@ import DFP_Upcoming from '@salesforce/label/c.DFP_Upcoming';
 
 export default class DynamicFlowProgressLWC extends LightningElement {
     @api indicatorType;
+    @api indicatorTypeMobile;
     @api stepList;
     @api currentStep;
     @api currentStepPercentage;
@@ -29,7 +30,7 @@ export default class DynamicFlowProgressLWC extends LightningElement {
     showTypeVertNav;
     showTypeHorizontal;
     showTypePath;
-    showTypeBar;
+    @track showTypeBar;
     showTypeRing;
 
     stepsArray;
@@ -44,9 +45,14 @@ export default class DynamicFlowProgressLWC extends LightningElement {
     connectedCallback(){
         
         // clean the indicatorType variable of any leading/trailing spaces and convert to lowercase
-        let indicatorDirty = this.indicatorType;
-        let indicatorClean = indicatorDirty.trim().toLowerCase();
         let considerCurrentStepPercentage = false;
+        let indicatorDirty = this.indicatorType;
+        let indicatorMobileDirty = (this.indicatorTypeMobile ?? this.indicatorType);
+
+        // determine which indicator to use, mobile or tablet/desktop
+        const flowSectionResponsiveThreshold = 765; // this is the threshold for Section control to switch to responsive view
+        let formMobile = (window.innerWidth <= flowSectionResponsiveThreshold);
+        let indicatorClean = (formMobile ? indicatorMobileDirty : indicatorDirty).trim().toLowerCase();
 
         // set conditions for which indicator type displays
         switch (indicatorClean) {
@@ -88,18 +94,18 @@ export default class DynamicFlowProgressLWC extends LightningElement {
             currentCount = i+1;
 
             let isFinalStep = false;
-            if(currentCount == countTotalSteps){
+            if(currentCount === countTotalSteps){
                 isFinalStep = true;
             }
             
             let cleanArrayValue = stepListArray[i].trim();
             
-            if(afterCurrent == false) {
+            if(afterCurrent === false) {
                 
                 // this step might be Completed or Current
-                if(cleanArrayValue == this.currentStep) {
+                if(cleanArrayValue === this.currentStep) {
                     
-                    if(isFinalStep == true) {
+                    if(isFinalStep === true) {
                         switch (indicatorClean) {
                             case 'vertical':
                                 // this is the final step for the vertnav indicator type, but it needs to be display as Current
@@ -192,7 +198,7 @@ export default class DynamicFlowProgressLWC extends LightningElement {
         // this.countTotalSteps = countTotalSteps;
 
         // set pathProgress to number of steps unless currentStepPercentage is set
-        if(considerCurrentStepPercentage == true) {
+        if(considerCurrentStepPercentage === true) {
 
             let percentProperty = this.currentStepPercentage;
 
@@ -201,7 +207,7 @@ export default class DynamicFlowProgressLWC extends LightningElement {
 
                 this.stepPercent = percentProperty;
 
-                let testPercent = percentProperty;
+                // let testPercent = percentProperty;
 
                 // need a label property for the Bar indicator type that shows completion like "45% Complete"
                 this.progressLabel = `${percentProperty}% ${this.label.DFP_Complete}`;

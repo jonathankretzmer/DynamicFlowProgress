@@ -11,6 +11,11 @@
         name="indicatorType"
         type="String"
         description="Vertical, Horizontal, Path, Bar, VertNav, or Ring" />
+      
+      <property label="Indicator Type for 'Small' form factor (Optional)"
+        name="indicatorTypeMobile"
+        type="String"
+        description="Optional. Vertical, Horizontal, Path, Bar, VertNav, or Ring" />
 
       <property label="Comma-Separated List of Steps"
         name="stepList"
