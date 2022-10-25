@@ -295,12 +295,3 @@ export default class DynamicFlowProgressLWC extends LightningElement {
       }, false);
     }
 }
-
-// function debounce(func, timeout = 300){
-//   let timer;
-//   return (...args) => { // eslint-disable-line @lwc/lwc/no-rest-parameter
-//     clearTimeout(timer);
-//     // eslint-disable-next-line @lwc/lwc/no-async-operation
-//     timer = setTimeout(() => { func.apply(this, args); }, timeout);
-//   };
-// }
