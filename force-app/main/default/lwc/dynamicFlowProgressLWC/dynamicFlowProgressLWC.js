@@ -26,14 +26,14 @@ export default class DynamicFlowProgressLWC extends LightningElement {
         DFP_Upcoming
     };
 
-    showTypeVertical;
-    showTypeVertNav;
-    showTypeHorizontal;
-    showTypePath;
+    @track showTypeVertical;
+    @track showTypeVertNav;
+    @track showTypeHorizontal;
+    @track showTypePath;
     @track showTypeBar;
-    showTypeRing;
+    @track showTypeRing;
 
-    stepsArray;
+    @track stepsArray;
     pathProgress;
 
     stepPercent;
@@ -41,17 +41,31 @@ export default class DynamicFlowProgressLWC extends LightningElement {
     countToCurrent;
 
     progressLabel;
+
+    flowSectionResponsiveThreshold = 765;
     
     connectedCallback(){
-        
+        this.buildStepsArray();
+        this.setupWindowSizeWatcher();
+    }
+
+    buildStepsArray() {
+        // reset variables to allow for changes due to form factor
+        this.showTypeVertical = false;
+        this.showTypeVertNav = false;
+        this.showTypeHorizontal = false;
+        this.showTypePath = false;
+        this.showTypeBar = false;
+        this.showTypeRing = false;
+        this.showTypeHorizontal = false;
+      
         // clean the indicatorType variable of any leading/trailing spaces and convert to lowercase
         let considerCurrentStepPercentage = false;
         let indicatorDirty = this.indicatorType;
         let indicatorMobileDirty = (this.indicatorTypeMobile ?? this.indicatorType);
 
         // determine which indicator to use, mobile or tablet/desktop
-        const flowSectionResponsiveThreshold = 765; // this is the threshold for Section control to switch to responsive view
-        let formMobile = (window.innerWidth <= flowSectionResponsiveThreshold);
+        let formMobile = (window.innerWidth <= this.flowSectionResponsiveThreshold);
         let indicatorClean = (formMobile ? indicatorMobileDirty : indicatorDirty).trim().toLowerCase();
 
         // set conditions for which indicator type displays
@@ -265,4 +279,28 @@ export default class DynamicFlowProgressLWC extends LightningElement {
     get isClickable() {
       return this.stepClickable ? 'clickable' : '';
     }
+
+    setupWindowSizeWatcher() {
+      let timeout;
+      window.addEventListener('resize', () => {
+        // If there's a timer, cancel it
+        if (timeout) {
+          window.cancelAnimationFrame(timeout);
+        }
+        let that = this;
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        timeout = window.requestAnimationFrame(() => {
+          that.buildStepsArray();
+        });
+      }, false);
+    }
 }
+
+// function debounce(func, timeout = 300){
+//   let timer;
+//   return (...args) => { // eslint-disable-line @lwc/lwc/no-rest-parameter
+//     clearTimeout(timer);
+//     // eslint-disable-next-line @lwc/lwc/no-async-operation
+//     timer = setTimeout(() => { func.apply(this, args); }, timeout);
+//   };
+// }
