@@ -71,13 +71,15 @@
                     <!-- if Complete -->
                     <template if:true={step.showComplete}>
                         <li key={step.label} class="slds-progress__item slds-is-completed">
-                            <span class="slds-icon_container slds-icon-utility-success slds-progress__marker slds-progress__marker_icon slds-progress__marker_icon-success" title={label.DFP_Complete}>
-                                <div class="slds-icon slds-icon_xx-small" aria-hidden="true">
-                                    <lightning-icon icon-name="utility:success" variant="success" size="xx-small" class="slds-icon slds-icon_xx-small"></lightning-icon>
-                                </div>
-                                <span class="slds-assistive-text">{label.DFP_Complete}</span>
-                            </span>
-                            <div class="slds-progress__item_content slds-grid slds-grid_align-spread">{step.label}</div>
+                          <span class="slds-icon_container slds-icon-utility-success slds-progress__marker slds-progress__marker_icon slds-progress__marker_icon-success" title={label.DFP_Complete}>
+                              <div class="slds-icon slds-icon_xx-small" aria-hidden="true">
+                                  <lightning-icon icon-name="utility:success" variant="success" size="xx-small" class="slds-icon slds-icon_xx-small"></lightning-icon>
+                              </div>
+                              <span class="slds-assistive-text">{label.DFP_Complete}</span>
+                          </span>
+                            <div class="slds-progress__item_content slds-grid slds-grid_align-spread">
+                            <span onclick={clickStepForward} class={isClickable}>{step.label}</span>
+                          </div>
                         </li>
                     </template>
                     
@@ -129,7 +131,9 @@
                         <!-- if Complete -->
                         <template if:true={step.showComplete}>
                             <li key={step.label} class="slds-nav-vertical__item">
-                                <span class="slds-nav-vertical__action no-hover">{step.label}</span>
+                                <span class="slds-nav-vertical__action no-hover">
+                                  <span onclick={clickStepForward} class={isClickable}>{step.label}</span>
+                                </span>
                                 <span class="slds-assistive-text">{label.DFP_Complete}</span>
                             </li>
                         </template>
@@ -227,7 +231,7 @@
                                     
                                     <!-- if Complete -->
                                     <template if:true={step.showComplete}>
-                                        <li key={step.label} class="slds-path__item slds-is-complete" role="presentation">
+                                        <li key={step.label} class="slds-path__item slds-is-complete" role="presentation" onclick={clickStepForward}>
                                             <a aria-selected="false" class="slds-path__link" role="option">
                                                 <span class="slds-path__stage">
                                                     <lightning-icon icon-name="utility:check" variant="inverse" size="xx-small" class="slds-icon slds-icon_x-small"></lightning-icon>

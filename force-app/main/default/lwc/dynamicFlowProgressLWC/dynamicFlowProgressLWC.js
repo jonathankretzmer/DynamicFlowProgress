@@ -1,4 +1,9 @@
 import { api, LightningElement } from 'lwc';
+import {
+  FlowAttributeChangeEvent,
+  FlowNavigationNextEvent,
+
+} from 'lightning/flowSupport';
 
 // Import custom labels
 import DFP_Complete from '@salesforce/label/c.DFP_Complete';
@@ -10,6 +15,8 @@ export default class DynamicFlowProgressLWC extends LightningElement {
     @api stepList;
     @api currentStep;
     @api currentStepPercentage;
+    @api stepClickable;
+    @api nextStep;
     
     // Expose the labels to use in the template
     label = {
@@ -227,5 +234,29 @@ export default class DynamicFlowProgressLWC extends LightningElement {
 
         // store list of steps to iterate over in the html
         this.stepsArray = stepsArrayTemp;
+    }
+
+    @api
+    clickStepForward(event) {
+      if (this.stepClickable) {
+        let label = event.target.innerText;
+        this.dispatchEvent(new FlowAttributeChangeEvent(
+          'nextStep',
+          label
+      ));
+
+        
+      // hack to allow for propogation of the FlowAttributeChangeEvent event before navigating
+      // https://trailblazer.salesforce.com/issues_view?id=a1p4V000001cWwfQAE&title=lwc-using-flowattributechangeevent-and-flownavigationnextevent-together-in-a-method-while-navigating-to-next-screen-does-not-update-the-value-of-the-v
+      // eslint-disable-next-line @lwc/lwc/no-async-operation
+      setTimeout(() => {
+        this.dispatchEvent(new FlowNavigationNextEvent());
+      }, 1);
+      }
+    }
+
+    @api
+    get isClickable() {
+      return this.stepClickable ? 'clickable' : '';
     }
 }

@@ -1,32 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>55.0</apiVersion>
-    <isExposed>true</isExposed>
-    <targets>
-        <target>lightning__FlowScreen</target>
-    </targets>
-    <targetConfigs>
-        <targetConfig targets="lightning__FlowScreen">
-            <property   label="Indicator Type"
-                        name="indicatorType"
-                        type="String"
-                        description="Vertical, Horizontal, Path, Bar, VertNav, or Ring" />
+  <apiVersion>55.0</apiVersion>
+  <isExposed>true</isExposed>
+  <targets>
+    <target>lightning__FlowScreen</target>
+  </targets>
+  <targetConfigs>
+    <targetConfig targets="lightning__FlowScreen">
+      <property label="Indicator Type"
+        name="indicatorType"
+        type="String"
+        description="Vertical, Horizontal, Path, Bar, VertNav, or Ring" />
 
-            <property   label="Comma-Separated List of Steps"
-                        name="stepList"
-                        type="String"
-                        description="Example: Step 1,Step 2,Step 3. Recommend storing this in a constant." />
+      <property label="Comma-Separated List of Steps"
+        name="stepList"
+        type="String"
+        description="Example: Step 1,Step 2,Step 3. Recommend storing this in a constant." />
 
-            <property   label="Current Step"
-                        name="currentStep"
-                        type="String"
-                        description="Example: Step 1" />
-                        
-            <property   label="Current Step Percentage Completion (Optional)"
-                        name="currentStepPercentage"
-                        type="Integer"
-                        description="Optional. Must be integer between 0 and 100. Leave blank unless you want to override the auto-calculated percentage. Only affects Ring and Bar indicator types." />
-        </targetConfig>
-    </targetConfigs>
-    <masterLabel>Dynamic Flow Progress</masterLabel>
+      <property label="Current Step"
+        name="currentStep"
+        type="String"
+        description="Example: Step 1" />
+
+      <property label="Current Step Percentage Completion (Optional)"
+        name="currentStepPercentage"
+        type="Integer"
+        description="Optional. Must be integer between 0 and 100. Leave blank unless you want to override the auto-calculated percentage. Only affects Ring and Bar indicator types." />
+
+      <property label="Make the navigation buttons clickable (Optional)"
+        name="stepClickable"
+        type="Boolean"
+        description="The navigation items for all types exceppt Bar and Ring"
+        default="false" />
+
+      <property label="Next navigation screen (Optional)"
+        name="nextStep"
+        type="String"
+        description="Optional. Used for clickable navigation flow decisions. Needs to be explicitly set up in advanced output to work. Example: Step 1" />
+    </targetConfig>
+  </targetConfigs>
+  <masterLabel>Dynamic Flow Progress</masterLabel>
 </LightningComponentBundle>
